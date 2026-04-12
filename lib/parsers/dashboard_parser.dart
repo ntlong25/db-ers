@@ -1,3 +1,4 @@
+import 'dart:developer' show log;
 import 'dart:typed_data';
 import '../models/bike_data.dart';
 
@@ -43,6 +44,8 @@ class DashboardParser {
     final isParking = data.getUint8(14) == 1;
     final voltage = data.getFloat32(15, Endian.little); // unaligned — safe
     final batteryPercent = data.getUint8(19).toDouble();
+    // DEBUG: bỏ sau khi xác nhận byte map đúng
+    log('[DashboardParser] len=${bytes.length} soc_byte=${bytes[19]} volt=${data.getFloat32(15, Endian.little).toStringAsFixed(2)}V', name: 'BLE');
     final tempBalanceReg = data.getFloat32(20, Endian.little);
     final tempMotor = data.getFloat32(24, Endian.little);
     final tempController = data.getFloat32(28, Endian.little);

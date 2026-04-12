@@ -44,6 +44,9 @@ class JsonParser {
     } else if (socObj != null) {
       soc = _toDouble(socObj);
     }
+    // Chuẩn hóa: một số BMS gửi SOC dạng phân số 0.0–1.0 thay vì phần trăm 0–100
+    // Ví dụ: 0.85 → 85%, 1.0 → 100%
+    if (soc > 0.0 && soc < 1.5) soc *= 100;
 
     // --- Trạng thái sạc ---
     final isCharging = _toBool(json['isCharging'] ?? json['charging']);

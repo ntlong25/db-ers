@@ -18,7 +18,7 @@ class TurnIndicatorIcon extends StatelessWidget {
     return Text(
       label,
       style: TextStyle(
-        color: active ? AppColors.orange : AppColors.textDim,
+        color: active ? AppColors.green : AppColors.textDim,
         fontSize: 16,
         fontWeight: FontWeight.bold,
       ),
@@ -81,27 +81,17 @@ class BigTurnArrow extends StatelessWidget {
             children: [
               // Outer glow
               Icon(icon, size: 64, color: active
-                  ? AppColors.orange.withAlpha(40)
+                  ? AppColors.green.withAlpha(40)
                   : Colors.transparent),
               // Mid glow
               Icon(icon, size: 52, color: active
-                  ? AppColors.orange.withAlpha(80)
+                  ? AppColors.green.withAlpha(80)
                   : Colors.transparent),
               // Main icon
               Icon(icon, size: 44,
-                color: active ? AppColors.orange : AppColors.textDim,
+                color: active ? AppColors.green : AppColors.textDim,
               ),
             ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            isLeft ? 'TRÁI' : 'PHẢI',
-            style: TextStyle(
-              color: active ? AppColors.orange : AppColors.textDim,
-              fontSize: 8,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),
           ),
         ],
       ),

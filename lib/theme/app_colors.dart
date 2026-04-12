@@ -14,6 +14,7 @@ class AppColors {
   // ── Accent ──────────────────────────────────────────
   static const accent = Color(0xFF00E5FF); // electric blue
   static const orange = Color(0xFFFF6D00); // sporty orange
+  static const green = Color(0xFF00E676); // sporty green
 
   // ── Status ──────────────────────────────────────────
   static const success = Color(0xFF00E676); // xanh lá
