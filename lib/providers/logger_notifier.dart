@@ -5,6 +5,7 @@ import '../ble/bike_ble_freq.dart';
 import '../models/bike_data.dart';
 import '../models/bike_log_entry.dart';
 import '../models/trip_entry.dart';
+import '../models/charge_cycle_entry.dart';
 import '../services/notification_service.dart';
 import 'bike_data_provider.dart';
 import 'ble_connection_provider.dart';
@@ -18,13 +19,15 @@ final loggerProvider = Provider<BikeLogger>((ref) {
   return logger;
 });
 
-enum _TripState { idle, active, ending }
+enum _TripState  { idle, active, ending }
+enum _ChargeState { unknown, discharging, charging }
 
 class BikeLogger {
   final Ref _ref;
   Timer? _logTimer;
   int _lastPcbState = -1;
 
+  // ── Trip tracking ──────────────────────────────────────────────────────────
   _TripState _tripState    = _TripState.idle;
   double?  _tripStartOdo;
   int?     _tripStartTime;
@@ -38,6 +41,13 @@ class BikeLogger {
   Timer?   _tripEndTimer;
   int      _lastSpeedAlertMs = 0;
 
+  // ── Charge-cycle tracking ──────────────────────────────────────────────────
+  _ChargeState _chargeState      = _ChargeState.unknown;
+  bool         _lastIsCharging   = false;
+  double       _cycleStartSoc    = 0;
+  double       _cycleStartOdo    = 0;
+  int          _cycleStartAt     = 0;
+
   BikeLogger(this._ref) {
     _ref.listen(bleConnectionProvider, (prev, next) {
       if (next.isConnected) {
@@ -45,7 +55,8 @@ class BikeLogger {
       } else {
         _stopLogging();
         _cancelTripEnd();
-        _tripState = _TripState.idle;
+        _tripState   = _TripState.idle;
+        _chargeState = _ChargeState.unknown;
       }
     });
   }
@@ -75,6 +86,7 @@ class BikeLogger {
 
       await _writeLog(data);
       _processTripDetection(data);
+      _processChargeDetection(data);
       _checkSpeedAlert(data);
     });
   }
@@ -160,6 +172,82 @@ class BikeLogger {
   }
 
   void _cancelTripEnd() { _tripEndTimer?.cancel(); _tripEndTimer = null; }
+
+  // ── Charge-Cycle Detection ────────────────────────────────────────────────
+
+  /// Phát hiện chuyển trạng thái isCharging để ghi lại phiên xả pin.
+  ///
+  /// Logic:
+  ///  - Lần đầu kết nối → khởi tạo trạng thái theo isCharging hiện tại
+  ///  - charging=false → true  : kết thúc phiên xả → lưu ChargeCycleEntry
+  ///  - charging=true  → false : bắt đầu phiên xả mới
+  void _processChargeDetection(BikeData data) {
+    if (data.soc <= 0 || data.odo <= 0) return; // data chưa sẵn sàng
+
+    final isCharging = data.isCharging;
+
+    // Khởi tạo lần đầu sau khi kết nối
+    if (_chargeState == _ChargeState.unknown) {
+      _lastIsCharging = isCharging;
+      if (!isCharging) {
+        _chargeState    = _ChargeState.discharging;
+        _cycleStartSoc  = data.soc;
+        _cycleStartOdo  = data.odo;
+        _cycleStartAt   = DateTime.now().millisecondsSinceEpoch;
+      } else {
+        _chargeState = _ChargeState.charging;
+      }
+      return;
+    }
+
+    // Không thay đổi → không cần xử lý
+    if (isCharging == _lastIsCharging) return;
+    _lastIsCharging = isCharging;
+
+    if (isCharging) {
+      // false → true: vừa cắm sạc → kết thúc phiên xả
+      if (_chargeState == _ChargeState.discharging) {
+        _finalizeChargeCycle(data);
+      }
+      _chargeState = _ChargeState.charging;
+    } else {
+      // true → false: vừa rút sạc → bắt đầu phiên xả mới
+      _chargeState   = _ChargeState.discharging;
+      _cycleStartSoc = data.soc;
+      _cycleStartOdo = data.odo;
+      _cycleStartAt  = DateTime.now().millisecondsSinceEpoch;
+    }
+  }
+
+  Future<void> _finalizeChargeCycle(BikeData data) async {
+    final socUsed    = (_cycleStartSoc - data.soc).clamp(0.0, 100.0);
+    final distanceKm = (data.odo - _cycleStartOdo).clamp(0.0, 9999.0);
+
+    // Lọc: bỏ qua nếu dữ liệu quá nhỏ (chỉ cắm sạc trong giây lát)
+    if (socUsed < 5 || distanceKm < 0.5) return;
+
+    final kmPerPercent       = distanceKm / socUsed;
+    final projectedFullRange = kmPerPercent * 100;
+    final nowMs              = DateTime.now().millisecondsSinceEpoch;
+
+    final entry = ChargeCycleEntry(
+      id:                 0, // auto-increment
+      startAt:            _cycleStartAt,
+      endAt:              nowMs,
+      startSoc:           _cycleStartSoc,
+      endSoc:             data.soc,
+      socUsed:            socUsed,
+      startOdo:           _cycleStartOdo,
+      endOdo:             data.odo,
+      distanceKm:         distanceKm,
+      kmPerPercent:       kmPerPercent,
+      projectedFullRange: projectedFullRange,
+    );
+
+    try {
+      await _ref.read(chargeCycleDaoProvider).insertCycle(entry);
+    } catch (_) {}
+  }
 
   // ── Speed Alert ──────────────────────────────────────────────────────────
 

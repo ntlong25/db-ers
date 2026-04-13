@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/bike_data.dart';
+import '../../../providers/smart_range_provider.dart';
 import '../../../theme/app_colors.dart';
 
 /// BatteryIndicator — card pin gradient với SOC%, range, voltage
-class BatteryIndicator extends StatelessWidget {
+class BatteryIndicator extends ConsumerWidget {
   final BikeData data;
 
   const BatteryIndicator({super.key, required this.data});
@@ -16,8 +18,9 @@ class BatteryIndicator extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final soc = data.soc.clamp(0.0, 100.0);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final soc        = data.soc.clamp(0.0, 100.0);
+    final smartAsync = ref.watch(smartRangeProvider);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -29,33 +32,44 @@ class BatteryIndicator extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Row 1: SOC% — bar — km còn lại
+          // Row 1: SOC% ←→ Range (cùng kích cỡ, nổi bật)
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // SOC %
+              // ── SOC % ──
               _BattIcon(soc: soc, color: _barColor),
-              const SizedBox(width: 8),
-              Text(
-                '${soc.toStringAsFixed(0)}%',
-                style: TextStyle(
-                  color: _barColor,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                ),
+              const SizedBox(width: 6),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${soc.toStringAsFixed(0)}%',
+                    style: TextStyle(
+                      color: _barColor,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      height: 1.0,
+                    ),
+                  ),
+                  const Text('pin còn lại',
+                      style: TextStyle(
+                          color: AppColors.textDim, fontSize: 9)),
+                ],
               ),
-              const SizedBox(width: 12),
-              // Bar
+
+              const SizedBox(width: 10),
+
+              // ── Progress bar (giữa) ──
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: Stack(
                     children: [
-                      Container(height: 10, color: AppColors.divider),
+                      Container(height: 8, color: AppColors.divider),
                       FractionallySizedBox(
                         widthFactor: soc / 100,
                         child: Container(
-                          height: 10,
+                          height: 8,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [_barColor.withAlpha(200), _barColor],
@@ -68,34 +82,75 @@ class BatteryIndicator extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              // Range + voltage
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '${data.kmLeft.toStringAsFixed(0)} km',
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '${data.voltage.toStringAsFixed(1)} V',
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
+
+              const SizedBox(width: 10),
+
+              // ── Smart Range / Firmware Range ──
+              smartAsync.when(
+                data: (smart) => smart.hasData
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              const Icon(Icons.navigation,
+                                  size: 13, color: AppColors.success),
+                              const SizedBox(width: 3),
+                              Text(
+                                '~${smart.predictedKm.toStringAsFixed(0)} km',
+                                style: const TextStyle(
+                                  color: AppColors.success,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Text('dự báo range',
+                              style: TextStyle(
+                                  color: AppColors.success,
+                                  fontSize: 9)),
+                        ],
+                      )
+                    : _FirmwareRange(kmLeft: data.kmLeft),
+                loading: () => _FirmwareRange(kmLeft: data.kmLeft),
+                error: (_, __) => _FirmwareRange(kmLeft: data.kmLeft),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          // Row 2: trạng thái sạc + dòng điện
+
+          const SizedBox(height: 10),
+
+          // ── Voltage + divider ──
           Row(
             children: [
+              const Icon(Icons.electric_bolt,
+                  size: 11, color: AppColors.textDim),
+              const SizedBox(width: 3),
+              Text(
+                '${data.voltage.toStringAsFixed(1)} V',
+                style: const TextStyle(
+                    color: AppColors.textDim, fontSize: 11),
+              ),
+              // Smart range source hint
+              smartAsync.maybeWhen(
+                data: (smart) => smart.hasData
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Text(
+                          '(${smart.sessionCount} phiên sạc)',
+                          style: const TextStyle(
+                              color: AppColors.textDim, fontSize: 9),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+                orElse: () => const SizedBox.shrink(),
+              ),
+              const Spacer(),
               _TagChip(
                 icon: data.isCharging ? Icons.bolt : Icons.battery_charging_full,
                 label: data.isCharging ? 'Đang sạc' : 'Đang xả',
@@ -107,7 +162,7 @@ class BatteryIndicator extends StatelessWidget {
                 label: '${data.current.abs().toStringAsFixed(1)} A',
                 color: AppColors.textSecondary,
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               _TagChip(
                 icon: Icons.loop,
                 label: '${data.cycles} chu kỳ',
@@ -117,6 +172,31 @@ class BatteryIndicator extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FirmwareRange extends StatelessWidget {
+  final double kmLeft;
+  const _FirmwareRange({required this.kmLeft});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          '${kmLeft.toStringAsFixed(0)} km',
+          style: const TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 24,
+            fontWeight: FontWeight.w800,
+            height: 1.0,
+          ),
+        ),
+        const Text('ước tính',
+            style: TextStyle(color: AppColors.textDim, fontSize: 9)),
+      ],
     );
   }
 }

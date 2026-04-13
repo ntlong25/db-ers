@@ -80,23 +80,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       );
     }
 
-    ref.listen(bleConnectionProvider, (prev, next) async {
-      final data = ref.read(bikeDataProvider);
-      if (next.isConnected && !(prev?.isConnected ?? false)) {
-        startForegroundService();
-      } else if (!next.isConnected && (prev?.isConnected ?? false)) {
-        stopForegroundService();
-      }
-      if (next.isConnected) {
-        await NotificationService.updateConnected(
-          speed: data.speed,
-          soc: data.soc,
-          bikeName: data.name,
-          alarmSounding: data.isAlarmSounding,
-        );
-      }
-    });
-
     if (mounted) await ref.read(bleConnectionProvider.notifier).initialize();
   }
 
@@ -171,6 +154,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final bleState = ref.watch(bleConnectionProvider);
     final data     = ref.watch(bikeDataProvider);
     final savedMac = ref.watch(savedMacProvider);
+
+    // ref.listen phải nằm trong build()
+    ref.listen<BleState>(bleConnectionProvider, (prev, next) async {
+      final bikeData = ref.read(bikeDataProvider);
+      if (next.isConnected && !(prev?.isConnected ?? false)) {
+        startForegroundService();
+      } else if (!next.isConnected && (prev?.isConnected ?? false)) {
+        stopForegroundService();
+      }
+      if (next.isConnected) {
+        await NotificationService.updateConnected(
+          speed: bikeData.speed,
+          soc: bikeData.soc,
+          bikeName: bikeData.name,
+          alarmSounding: bikeData.isAlarmSounding,
+        );
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppColors.bg,

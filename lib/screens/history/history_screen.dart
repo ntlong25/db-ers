@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/history_provider.dart';
 import '../../theme/app_colors.dart';
 import '../trips/trips_screen.dart';
+import 'widgets/charge_history_tab.dart';
 import 'widgets/time_filter_bar.dart';
 import 'widgets/temp_chart.dart';
 import 'widgets/power_chart.dart';
@@ -23,7 +24,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -147,6 +148,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
           tabs: const [
             Tab(text: 'Biểu đồ'),
             Tab(text: 'Chuyến đi'),
+            Tab(text: 'Lần sạc'),
           ],
         ),
       ),
@@ -213,6 +215,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
 
           // Tab 1: Trips
           const TripsScreen(),
+
+          // Tab 2: Charge history
+          const ChargeHistoryTab(),
         ],
       ),
     );

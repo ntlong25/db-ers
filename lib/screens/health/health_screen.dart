@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../models/bike_log_entry.dart';
 import '../../providers/bike_data_provider.dart';
 import '../../providers/database_provider.dart';
 import '../../theme/app_colors.dart';
@@ -10,7 +9,7 @@ import '../../utils/battery_health_analyzer.dart';
 /// Provider lấy logs 30 ngày + chạy phân tích
 final _healthReportProvider = FutureProvider<BatteryHealthReport>((ref) async {
   final dao  = ref.watch(bikeLogDaoProvider);
-  final data = ref.watch(bikeDataProvider);
+  final data = ref.read(bikeDataProvider);  // read, không watch — tránh re-trigger liên tục
 
   final end   = DateTime.now();
   final start = end.subtract(const Duration(days: 30));

@@ -205,10 +205,10 @@ class BleConnectionNotifier extends StateNotifier<BleState> {
       dataNotifier.reset();
 
       final savedMac = _ref.read(savedMacProvider);
-      if (savedMac != null && mounted) {
+      if (savedMac != null) {
         state = BleReconnecting(savedMac, 0);
         startReconnect(savedMac);
-      } else if (mounted) {
+      } else {
         state = const BleIdle();
       }
     };

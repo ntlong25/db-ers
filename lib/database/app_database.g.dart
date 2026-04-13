@@ -1373,18 +1373,568 @@ class TripTableCompanion extends UpdateCompanion<TripTableData> {
   }
 }
 
+class $ChargeCycleTableTable extends ChargeCycleTable
+    with TableInfo<$ChargeCycleTableTable, ChargeCycleTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChargeCycleTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _startAtMeta =
+      const VerificationMeta('startAt');
+  @override
+  late final GeneratedColumn<int> startAt = GeneratedColumn<int>(
+      'start_at', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _endAtMeta = const VerificationMeta('endAt');
+  @override
+  late final GeneratedColumn<int> endAt = GeneratedColumn<int>(
+      'end_at', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _startSocMeta =
+      const VerificationMeta('startSoc');
+  @override
+  late final GeneratedColumn<double> startSoc = GeneratedColumn<double>(
+      'start_soc', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _endSocMeta = const VerificationMeta('endSoc');
+  @override
+  late final GeneratedColumn<double> endSoc = GeneratedColumn<double>(
+      'end_soc', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _socUsedMeta =
+      const VerificationMeta('socUsed');
+  @override
+  late final GeneratedColumn<double> socUsed = GeneratedColumn<double>(
+      'soc_used', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _startOdoMeta =
+      const VerificationMeta('startOdo');
+  @override
+  late final GeneratedColumn<double> startOdo = GeneratedColumn<double>(
+      'start_odo', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _endOdoMeta = const VerificationMeta('endOdo');
+  @override
+  late final GeneratedColumn<double> endOdo = GeneratedColumn<double>(
+      'end_odo', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _distanceKmMeta =
+      const VerificationMeta('distanceKm');
+  @override
+  late final GeneratedColumn<double> distanceKm = GeneratedColumn<double>(
+      'distance_km', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _kmPerPercentMeta =
+      const VerificationMeta('kmPerPercent');
+  @override
+  late final GeneratedColumn<double> kmPerPercent = GeneratedColumn<double>(
+      'km_per_percent', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _projectedFullRangeMeta =
+      const VerificationMeta('projectedFullRange');
+  @override
+  late final GeneratedColumn<double> projectedFullRange =
+      GeneratedColumn<double>('projected_full_range', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        startAt,
+        endAt,
+        startSoc,
+        endSoc,
+        socUsed,
+        startOdo,
+        endOdo,
+        distanceKm,
+        kmPerPercent,
+        projectedFullRange
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'charge_cycles';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ChargeCycleTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('start_at')) {
+      context.handle(_startAtMeta,
+          startAt.isAcceptableOrUnknown(data['start_at']!, _startAtMeta));
+    } else if (isInserting) {
+      context.missing(_startAtMeta);
+    }
+    if (data.containsKey('end_at')) {
+      context.handle(
+          _endAtMeta, endAt.isAcceptableOrUnknown(data['end_at']!, _endAtMeta));
+    } else if (isInserting) {
+      context.missing(_endAtMeta);
+    }
+    if (data.containsKey('start_soc')) {
+      context.handle(_startSocMeta,
+          startSoc.isAcceptableOrUnknown(data['start_soc']!, _startSocMeta));
+    } else if (isInserting) {
+      context.missing(_startSocMeta);
+    }
+    if (data.containsKey('end_soc')) {
+      context.handle(_endSocMeta,
+          endSoc.isAcceptableOrUnknown(data['end_soc']!, _endSocMeta));
+    } else if (isInserting) {
+      context.missing(_endSocMeta);
+    }
+    if (data.containsKey('soc_used')) {
+      context.handle(_socUsedMeta,
+          socUsed.isAcceptableOrUnknown(data['soc_used']!, _socUsedMeta));
+    } else if (isInserting) {
+      context.missing(_socUsedMeta);
+    }
+    if (data.containsKey('start_odo')) {
+      context.handle(_startOdoMeta,
+          startOdo.isAcceptableOrUnknown(data['start_odo']!, _startOdoMeta));
+    } else if (isInserting) {
+      context.missing(_startOdoMeta);
+    }
+    if (data.containsKey('end_odo')) {
+      context.handle(_endOdoMeta,
+          endOdo.isAcceptableOrUnknown(data['end_odo']!, _endOdoMeta));
+    } else if (isInserting) {
+      context.missing(_endOdoMeta);
+    }
+    if (data.containsKey('distance_km')) {
+      context.handle(
+          _distanceKmMeta,
+          distanceKm.isAcceptableOrUnknown(
+              data['distance_km']!, _distanceKmMeta));
+    } else if (isInserting) {
+      context.missing(_distanceKmMeta);
+    }
+    if (data.containsKey('km_per_percent')) {
+      context.handle(
+          _kmPerPercentMeta,
+          kmPerPercent.isAcceptableOrUnknown(
+              data['km_per_percent']!, _kmPerPercentMeta));
+    } else if (isInserting) {
+      context.missing(_kmPerPercentMeta);
+    }
+    if (data.containsKey('projected_full_range')) {
+      context.handle(
+          _projectedFullRangeMeta,
+          projectedFullRange.isAcceptableOrUnknown(
+              data['projected_full_range']!, _projectedFullRangeMeta));
+    } else if (isInserting) {
+      context.missing(_projectedFullRangeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ChargeCycleTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChargeCycleTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      startAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}start_at'])!,
+      endAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}end_at'])!,
+      startSoc: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}start_soc'])!,
+      endSoc: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}end_soc'])!,
+      socUsed: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}soc_used'])!,
+      startOdo: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}start_odo'])!,
+      endOdo: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}end_odo'])!,
+      distanceKm: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}distance_km'])!,
+      kmPerPercent: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}km_per_percent'])!,
+      projectedFullRange: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}projected_full_range'])!,
+    );
+  }
+
+  @override
+  $ChargeCycleTableTable createAlias(String alias) {
+    return $ChargeCycleTableTable(attachedDatabase, alias);
+  }
+}
+
+class ChargeCycleTableData extends DataClass
+    implements Insertable<ChargeCycleTableData> {
+  final int id;
+  final int startAt;
+  final int endAt;
+  final double startSoc;
+  final double endSoc;
+  final double socUsed;
+  final double startOdo;
+  final double endOdo;
+  final double distanceKm;
+  final double kmPerPercent;
+  final double projectedFullRange;
+  const ChargeCycleTableData(
+      {required this.id,
+      required this.startAt,
+      required this.endAt,
+      required this.startSoc,
+      required this.endSoc,
+      required this.socUsed,
+      required this.startOdo,
+      required this.endOdo,
+      required this.distanceKm,
+      required this.kmPerPercent,
+      required this.projectedFullRange});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['start_at'] = Variable<int>(startAt);
+    map['end_at'] = Variable<int>(endAt);
+    map['start_soc'] = Variable<double>(startSoc);
+    map['end_soc'] = Variable<double>(endSoc);
+    map['soc_used'] = Variable<double>(socUsed);
+    map['start_odo'] = Variable<double>(startOdo);
+    map['end_odo'] = Variable<double>(endOdo);
+    map['distance_km'] = Variable<double>(distanceKm);
+    map['km_per_percent'] = Variable<double>(kmPerPercent);
+    map['projected_full_range'] = Variable<double>(projectedFullRange);
+    return map;
+  }
+
+  ChargeCycleTableCompanion toCompanion(bool nullToAbsent) {
+    return ChargeCycleTableCompanion(
+      id: Value(id),
+      startAt: Value(startAt),
+      endAt: Value(endAt),
+      startSoc: Value(startSoc),
+      endSoc: Value(endSoc),
+      socUsed: Value(socUsed),
+      startOdo: Value(startOdo),
+      endOdo: Value(endOdo),
+      distanceKm: Value(distanceKm),
+      kmPerPercent: Value(kmPerPercent),
+      projectedFullRange: Value(projectedFullRange),
+    );
+  }
+
+  factory ChargeCycleTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChargeCycleTableData(
+      id: serializer.fromJson<int>(json['id']),
+      startAt: serializer.fromJson<int>(json['startAt']),
+      endAt: serializer.fromJson<int>(json['endAt']),
+      startSoc: serializer.fromJson<double>(json['startSoc']),
+      endSoc: serializer.fromJson<double>(json['endSoc']),
+      socUsed: serializer.fromJson<double>(json['socUsed']),
+      startOdo: serializer.fromJson<double>(json['startOdo']),
+      endOdo: serializer.fromJson<double>(json['endOdo']),
+      distanceKm: serializer.fromJson<double>(json['distanceKm']),
+      kmPerPercent: serializer.fromJson<double>(json['kmPerPercent']),
+      projectedFullRange:
+          serializer.fromJson<double>(json['projectedFullRange']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'startAt': serializer.toJson<int>(startAt),
+      'endAt': serializer.toJson<int>(endAt),
+      'startSoc': serializer.toJson<double>(startSoc),
+      'endSoc': serializer.toJson<double>(endSoc),
+      'socUsed': serializer.toJson<double>(socUsed),
+      'startOdo': serializer.toJson<double>(startOdo),
+      'endOdo': serializer.toJson<double>(endOdo),
+      'distanceKm': serializer.toJson<double>(distanceKm),
+      'kmPerPercent': serializer.toJson<double>(kmPerPercent),
+      'projectedFullRange': serializer.toJson<double>(projectedFullRange),
+    };
+  }
+
+  ChargeCycleTableData copyWith(
+          {int? id,
+          int? startAt,
+          int? endAt,
+          double? startSoc,
+          double? endSoc,
+          double? socUsed,
+          double? startOdo,
+          double? endOdo,
+          double? distanceKm,
+          double? kmPerPercent,
+          double? projectedFullRange}) =>
+      ChargeCycleTableData(
+        id: id ?? this.id,
+        startAt: startAt ?? this.startAt,
+        endAt: endAt ?? this.endAt,
+        startSoc: startSoc ?? this.startSoc,
+        endSoc: endSoc ?? this.endSoc,
+        socUsed: socUsed ?? this.socUsed,
+        startOdo: startOdo ?? this.startOdo,
+        endOdo: endOdo ?? this.endOdo,
+        distanceKm: distanceKm ?? this.distanceKm,
+        kmPerPercent: kmPerPercent ?? this.kmPerPercent,
+        projectedFullRange: projectedFullRange ?? this.projectedFullRange,
+      );
+  ChargeCycleTableData copyWithCompanion(ChargeCycleTableCompanion data) {
+    return ChargeCycleTableData(
+      id: data.id.present ? data.id.value : this.id,
+      startAt: data.startAt.present ? data.startAt.value : this.startAt,
+      endAt: data.endAt.present ? data.endAt.value : this.endAt,
+      startSoc: data.startSoc.present ? data.startSoc.value : this.startSoc,
+      endSoc: data.endSoc.present ? data.endSoc.value : this.endSoc,
+      socUsed: data.socUsed.present ? data.socUsed.value : this.socUsed,
+      startOdo: data.startOdo.present ? data.startOdo.value : this.startOdo,
+      endOdo: data.endOdo.present ? data.endOdo.value : this.endOdo,
+      distanceKm:
+          data.distanceKm.present ? data.distanceKm.value : this.distanceKm,
+      kmPerPercent: data.kmPerPercent.present
+          ? data.kmPerPercent.value
+          : this.kmPerPercent,
+      projectedFullRange: data.projectedFullRange.present
+          ? data.projectedFullRange.value
+          : this.projectedFullRange,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChargeCycleTableData(')
+          ..write('id: $id, ')
+          ..write('startAt: $startAt, ')
+          ..write('endAt: $endAt, ')
+          ..write('startSoc: $startSoc, ')
+          ..write('endSoc: $endSoc, ')
+          ..write('socUsed: $socUsed, ')
+          ..write('startOdo: $startOdo, ')
+          ..write('endOdo: $endOdo, ')
+          ..write('distanceKm: $distanceKm, ')
+          ..write('kmPerPercent: $kmPerPercent, ')
+          ..write('projectedFullRange: $projectedFullRange')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, startAt, endAt, startSoc, endSoc, socUsed,
+      startOdo, endOdo, distanceKm, kmPerPercent, projectedFullRange);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChargeCycleTableData &&
+          other.id == this.id &&
+          other.startAt == this.startAt &&
+          other.endAt == this.endAt &&
+          other.startSoc == this.startSoc &&
+          other.endSoc == this.endSoc &&
+          other.socUsed == this.socUsed &&
+          other.startOdo == this.startOdo &&
+          other.endOdo == this.endOdo &&
+          other.distanceKm == this.distanceKm &&
+          other.kmPerPercent == this.kmPerPercent &&
+          other.projectedFullRange == this.projectedFullRange);
+}
+
+class ChargeCycleTableCompanion extends UpdateCompanion<ChargeCycleTableData> {
+  final Value<int> id;
+  final Value<int> startAt;
+  final Value<int> endAt;
+  final Value<double> startSoc;
+  final Value<double> endSoc;
+  final Value<double> socUsed;
+  final Value<double> startOdo;
+  final Value<double> endOdo;
+  final Value<double> distanceKm;
+  final Value<double> kmPerPercent;
+  final Value<double> projectedFullRange;
+  const ChargeCycleTableCompanion({
+    this.id = const Value.absent(),
+    this.startAt = const Value.absent(),
+    this.endAt = const Value.absent(),
+    this.startSoc = const Value.absent(),
+    this.endSoc = const Value.absent(),
+    this.socUsed = const Value.absent(),
+    this.startOdo = const Value.absent(),
+    this.endOdo = const Value.absent(),
+    this.distanceKm = const Value.absent(),
+    this.kmPerPercent = const Value.absent(),
+    this.projectedFullRange = const Value.absent(),
+  });
+  ChargeCycleTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int startAt,
+    required int endAt,
+    required double startSoc,
+    required double endSoc,
+    required double socUsed,
+    required double startOdo,
+    required double endOdo,
+    required double distanceKm,
+    required double kmPerPercent,
+    required double projectedFullRange,
+  })  : startAt = Value(startAt),
+        endAt = Value(endAt),
+        startSoc = Value(startSoc),
+        endSoc = Value(endSoc),
+        socUsed = Value(socUsed),
+        startOdo = Value(startOdo),
+        endOdo = Value(endOdo),
+        distanceKm = Value(distanceKm),
+        kmPerPercent = Value(kmPerPercent),
+        projectedFullRange = Value(projectedFullRange);
+  static Insertable<ChargeCycleTableData> custom({
+    Expression<int>? id,
+    Expression<int>? startAt,
+    Expression<int>? endAt,
+    Expression<double>? startSoc,
+    Expression<double>? endSoc,
+    Expression<double>? socUsed,
+    Expression<double>? startOdo,
+    Expression<double>? endOdo,
+    Expression<double>? distanceKm,
+    Expression<double>? kmPerPercent,
+    Expression<double>? projectedFullRange,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (startAt != null) 'start_at': startAt,
+      if (endAt != null) 'end_at': endAt,
+      if (startSoc != null) 'start_soc': startSoc,
+      if (endSoc != null) 'end_soc': endSoc,
+      if (socUsed != null) 'soc_used': socUsed,
+      if (startOdo != null) 'start_odo': startOdo,
+      if (endOdo != null) 'end_odo': endOdo,
+      if (distanceKm != null) 'distance_km': distanceKm,
+      if (kmPerPercent != null) 'km_per_percent': kmPerPercent,
+      if (projectedFullRange != null)
+        'projected_full_range': projectedFullRange,
+    });
+  }
+
+  ChargeCycleTableCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? startAt,
+      Value<int>? endAt,
+      Value<double>? startSoc,
+      Value<double>? endSoc,
+      Value<double>? socUsed,
+      Value<double>? startOdo,
+      Value<double>? endOdo,
+      Value<double>? distanceKm,
+      Value<double>? kmPerPercent,
+      Value<double>? projectedFullRange}) {
+    return ChargeCycleTableCompanion(
+      id: id ?? this.id,
+      startAt: startAt ?? this.startAt,
+      endAt: endAt ?? this.endAt,
+      startSoc: startSoc ?? this.startSoc,
+      endSoc: endSoc ?? this.endSoc,
+      socUsed: socUsed ?? this.socUsed,
+      startOdo: startOdo ?? this.startOdo,
+      endOdo: endOdo ?? this.endOdo,
+      distanceKm: distanceKm ?? this.distanceKm,
+      kmPerPercent: kmPerPercent ?? this.kmPerPercent,
+      projectedFullRange: projectedFullRange ?? this.projectedFullRange,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (startAt.present) {
+      map['start_at'] = Variable<int>(startAt.value);
+    }
+    if (endAt.present) {
+      map['end_at'] = Variable<int>(endAt.value);
+    }
+    if (startSoc.present) {
+      map['start_soc'] = Variable<double>(startSoc.value);
+    }
+    if (endSoc.present) {
+      map['end_soc'] = Variable<double>(endSoc.value);
+    }
+    if (socUsed.present) {
+      map['soc_used'] = Variable<double>(socUsed.value);
+    }
+    if (startOdo.present) {
+      map['start_odo'] = Variable<double>(startOdo.value);
+    }
+    if (endOdo.present) {
+      map['end_odo'] = Variable<double>(endOdo.value);
+    }
+    if (distanceKm.present) {
+      map['distance_km'] = Variable<double>(distanceKm.value);
+    }
+    if (kmPerPercent.present) {
+      map['km_per_percent'] = Variable<double>(kmPerPercent.value);
+    }
+    if (projectedFullRange.present) {
+      map['projected_full_range'] = Variable<double>(projectedFullRange.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChargeCycleTableCompanion(')
+          ..write('id: $id, ')
+          ..write('startAt: $startAt, ')
+          ..write('endAt: $endAt, ')
+          ..write('startSoc: $startSoc, ')
+          ..write('endSoc: $endSoc, ')
+          ..write('socUsed: $socUsed, ')
+          ..write('startOdo: $startOdo, ')
+          ..write('endOdo: $endOdo, ')
+          ..write('distanceKm: $distanceKm, ')
+          ..write('kmPerPercent: $kmPerPercent, ')
+          ..write('projectedFullRange: $projectedFullRange')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $BikeLogTableTable bikeLogTable = $BikeLogTableTable(this);
   late final $TripTableTable tripTable = $TripTableTable(this);
+  late final $ChargeCycleTableTable chargeCycleTable =
+      $ChargeCycleTableTable(this);
   late final BikeLogDao bikeLogDao = BikeLogDao(this as AppDatabase);
   late final TripDao tripDao = TripDao(this as AppDatabase);
+  late final ChargeCycleDao chargeCycleDao =
+      ChargeCycleDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [bikeLogTable, tripTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [bikeLogTable, tripTable, chargeCycleTable];
 }
 
 typedef $$BikeLogTableTableCreateCompanionBuilder = BikeLogTableCompanion
@@ -1933,6 +2483,225 @@ class $$TripTableTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+typedef $$ChargeCycleTableTableCreateCompanionBuilder
+    = ChargeCycleTableCompanion Function({
+  Value<int> id,
+  required int startAt,
+  required int endAt,
+  required double startSoc,
+  required double endSoc,
+  required double socUsed,
+  required double startOdo,
+  required double endOdo,
+  required double distanceKm,
+  required double kmPerPercent,
+  required double projectedFullRange,
+});
+typedef $$ChargeCycleTableTableUpdateCompanionBuilder
+    = ChargeCycleTableCompanion Function({
+  Value<int> id,
+  Value<int> startAt,
+  Value<int> endAt,
+  Value<double> startSoc,
+  Value<double> endSoc,
+  Value<double> socUsed,
+  Value<double> startOdo,
+  Value<double> endOdo,
+  Value<double> distanceKm,
+  Value<double> kmPerPercent,
+  Value<double> projectedFullRange,
+});
+
+class $$ChargeCycleTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ChargeCycleTableTable,
+    ChargeCycleTableData,
+    $$ChargeCycleTableTableFilterComposer,
+    $$ChargeCycleTableTableOrderingComposer,
+    $$ChargeCycleTableTableCreateCompanionBuilder,
+    $$ChargeCycleTableTableUpdateCompanionBuilder> {
+  $$ChargeCycleTableTableTableManager(
+      _$AppDatabase db, $ChargeCycleTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ChargeCycleTableTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ChargeCycleTableTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> startAt = const Value.absent(),
+            Value<int> endAt = const Value.absent(),
+            Value<double> startSoc = const Value.absent(),
+            Value<double> endSoc = const Value.absent(),
+            Value<double> socUsed = const Value.absent(),
+            Value<double> startOdo = const Value.absent(),
+            Value<double> endOdo = const Value.absent(),
+            Value<double> distanceKm = const Value.absent(),
+            Value<double> kmPerPercent = const Value.absent(),
+            Value<double> projectedFullRange = const Value.absent(),
+          }) =>
+              ChargeCycleTableCompanion(
+            id: id,
+            startAt: startAt,
+            endAt: endAt,
+            startSoc: startSoc,
+            endSoc: endSoc,
+            socUsed: socUsed,
+            startOdo: startOdo,
+            endOdo: endOdo,
+            distanceKm: distanceKm,
+            kmPerPercent: kmPerPercent,
+            projectedFullRange: projectedFullRange,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int startAt,
+            required int endAt,
+            required double startSoc,
+            required double endSoc,
+            required double socUsed,
+            required double startOdo,
+            required double endOdo,
+            required double distanceKm,
+            required double kmPerPercent,
+            required double projectedFullRange,
+          }) =>
+              ChargeCycleTableCompanion.insert(
+            id: id,
+            startAt: startAt,
+            endAt: endAt,
+            startSoc: startSoc,
+            endSoc: endSoc,
+            socUsed: socUsed,
+            startOdo: startOdo,
+            endOdo: endOdo,
+            distanceKm: distanceKm,
+            kmPerPercent: kmPerPercent,
+            projectedFullRange: projectedFullRange,
+          ),
+        ));
+}
+
+class $$ChargeCycleTableTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $ChargeCycleTableTable> {
+  $$ChargeCycleTableTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get startAt => $state.composableBuilder(
+      column: $state.table.startAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get endAt => $state.composableBuilder(
+      column: $state.table.endAt,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get startSoc => $state.composableBuilder(
+      column: $state.table.startSoc,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get endSoc => $state.composableBuilder(
+      column: $state.table.endSoc,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get socUsed => $state.composableBuilder(
+      column: $state.table.socUsed,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get startOdo => $state.composableBuilder(
+      column: $state.table.startOdo,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get endOdo => $state.composableBuilder(
+      column: $state.table.endOdo,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get distanceKm => $state.composableBuilder(
+      column: $state.table.distanceKm,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get kmPerPercent => $state.composableBuilder(
+      column: $state.table.kmPerPercent,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get projectedFullRange => $state.composableBuilder(
+      column: $state.table.projectedFullRange,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$ChargeCycleTableTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $ChargeCycleTableTable> {
+  $$ChargeCycleTableTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get startAt => $state.composableBuilder(
+      column: $state.table.startAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get endAt => $state.composableBuilder(
+      column: $state.table.endAt,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get startSoc => $state.composableBuilder(
+      column: $state.table.startSoc,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get endSoc => $state.composableBuilder(
+      column: $state.table.endSoc,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get socUsed => $state.composableBuilder(
+      column: $state.table.socUsed,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get startOdo => $state.composableBuilder(
+      column: $state.table.startOdo,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get endOdo => $state.composableBuilder(
+      column: $state.table.endOdo,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get distanceKm => $state.composableBuilder(
+      column: $state.table.distanceKm,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get kmPerPercent => $state.composableBuilder(
+      column: $state.table.kmPerPercent,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get projectedFullRange => $state.composableBuilder(
+      column: $state.table.projectedFullRange,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
@@ -1940,4 +2709,6 @@ class $AppDatabaseManager {
       $$BikeLogTableTableTableManager(_db, _db.bikeLogTable);
   $$TripTableTableTableManager get tripTable =>
       $$TripTableTableTableManager(_db, _db.tripTable);
+  $$ChargeCycleTableTableTableManager get chargeCycleTable =>
+      $$ChargeCycleTableTableTableManager(_db, _db.chargeCycleTable);
 }

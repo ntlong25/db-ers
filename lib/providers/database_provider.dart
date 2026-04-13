@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../database/app_database.dart';
 import '../database/bike_log_dao.dart';
 import '../database/trip_dao.dart';
+import '../database/charge_cycle_dao.dart';
 
 /// Provider cho AppDatabase singleton
 final databaseProvider = Provider<AppDatabase>((ref) {
@@ -20,4 +21,10 @@ final bikeLogDaoProvider = Provider<BikeLogDao>((ref) {
 final tripDaoProvider = Provider<TripDao>((ref) {
   final db = ref.watch(databaseProvider);
   return db.tripDao;
+});
+
+/// Provider cho ChargeCycleDao
+final chargeCycleDaoProvider = Provider<ChargeCycleDao>((ref) {
+  final db = ref.watch(databaseProvider);
+  return db.chargeCycleDao;
 });
