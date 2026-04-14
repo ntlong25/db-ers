@@ -1,0 +1,15 @@
+{
+  "project": "dtc_bike_flutter",
+  "platform": "ios",
+  "github": {
+    "owner": "ntlong25",
+    "repo": "db-ers"
+  },
+  "ios": {},
+  "flutter": {
+    "version": "3.41.6",
+    "watch": {}
+  },
+  "reactNative": {},
+  "mobai": {}
+}
