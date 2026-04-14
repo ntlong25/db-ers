@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../ble/bike_ble_constants.dart';
 import '../../providers/ble_connection_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_strings.dart';
 
 /// Scan Dialog — bottom sheet hiển thị danh sách xe Datbike tìm được
 /// Tương đương device scan list trong MainActivity.java
@@ -111,9 +112,9 @@ class _ScanDialogState extends ConsumerState<ScanDialog> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 children: [
-                  const Text(
-                    'Tìm kiếm Datbike',
-                    style: TextStyle(
+                  Text(
+                    S.ble.scanTitle,
+                    style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
@@ -128,7 +129,7 @@ class _ScanDialogState extends ConsumerState<ScanDialog> {
                     IconButton(
                       icon: const Icon(Icons.refresh, size: 20),
                       onPressed: _startScan,
-                      tooltip: 'Scan lại',
+                      tooltip: S.ble.rescan,
                     ),
                 ],
               ),
@@ -140,7 +141,7 @@ class _ScanDialogState extends ConsumerState<ScanDialog> {
               child: OutlinedButton.icon(
                 onPressed: _startDemo,
                 icon: const Icon(Icons.play_circle_outline, size: 18),
-                label: const Text('Chế độ Demo (máy ảo)'),
+                label: Text(S.ble.demoMode),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.orange,
                   side: const BorderSide(color: AppColors.orange),
@@ -166,8 +167,8 @@ class _ScanDialogState extends ConsumerState<ScanDialog> {
                           const SizedBox(height: 12),
                           Text(
                             _isScanning
-                                ? 'Đang tìm kiếm...'
-                                : 'Không tìm thấy xe',
+                                ? S.ble.scanning
+                                : S.ble.notFound,
                             style:
                                 const TextStyle(color: AppColors.textSecondary),
                           ),

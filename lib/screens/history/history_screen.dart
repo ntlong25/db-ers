@@ -8,6 +8,7 @@ import 'widgets/time_filter_bar.dart';
 import 'widgets/temp_chart.dart';
 import 'widgets/power_chart.dart';
 import 'widgets/cell_chart.dart';
+import '../../theme/app_strings.dart';
 
 /// History Screen — lịch sử hành trình + biểu đồ
 /// Tương đương HistoryActivity.java
@@ -123,10 +124,10 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
         backgroundColor: AppColors.card,
         title: Row(
           children: [
-            const Text('Lịch sử'),
+            Text(S.screen.history),
             const SizedBox(width: 8),
             countAsync.when(
-              data: (c) => Text('($c bản ghi)',
+              data: (c) => Text('($c ${S.history.recordSuffix})',
                   style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
               loading: () => const SizedBox(
                   width: 12,
@@ -145,10 +146,10 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
           indicatorColor: AppColors.accent,
           labelColor: AppColors.accent,
           unselectedLabelColor: AppColors.textSecondary,
-          tabs: const [
-            Tab(text: 'Biểu đồ'),
-            Tab(text: 'Chuyến đi'),
-            Tab(text: 'Lần sạc'),
+          tabs: [
+            Tab(text: S.screen.tabCharts),
+            Tab(text: S.screen.tabTrips),
+            Tab(text: S.screen.tabCharges),
           ],
         ),
       ),
@@ -174,16 +175,16 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
                       child: Text('Lỗi: $e',
                           style: const TextStyle(color: Colors.red))),
                   data: (logs) => logs.isEmpty
-                      ? const Center(
+                      ? Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.history_toggle_off,
+                              const Icon(Icons.history_toggle_off,
                                   size: 48, color: AppColors.textDim),
-                              SizedBox(height: 12),
+                              const SizedBox(height: 12),
                               Text(
-                                'Không có dữ liệu trong khoảng thời gian này',
-                                style: TextStyle(color: AppColors.textSecondary),
+                                S.history.noData,
+                                style: const TextStyle(color: AppColors.textSecondary),
                               ),
                             ],
                           ),

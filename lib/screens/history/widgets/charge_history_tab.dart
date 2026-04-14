@@ -4,6 +4,7 @@ import '../../../models/charge_cycle_entry.dart';
 import '../../../providers/database_provider.dart';
 import '../../../providers/smart_range_provider.dart';
 import '../../../theme/app_colors.dart';
+import '../../../theme/app_strings.dart';
 
 /// Provider lấy toàn bộ lịch sử phiên xả pin
 final _allCyclesProvider = FutureProvider.autoDispose<List<ChargeCycleEntry>>((ref) {
@@ -31,22 +32,22 @@ class ChargeHistoryTab extends ConsumerWidget {
           ),
 
           if (cycles.isEmpty)
-            const SliverFillRemaining(
+            SliverFillRemaining(
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.battery_charging_full,
+                    const Icon(Icons.battery_charging_full,
                         size: 48, color: AppColors.textDim),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Text(
-                      'Chưa có dữ liệu lịch sử sạc',
-                      style: TextStyle(color: AppColors.textSecondary),
+                      S.charge.noData,
+                      style: const TextStyle(color: AppColors.textSecondary),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
-                      'Dữ liệu được ghi tự động khi cắm/rút sạc',
-                      style: TextStyle(color: AppColors.textDim, fontSize: 11),
+                      S.charge.autoRecord,
+                      style: const TextStyle(color: AppColors.textDim, fontSize: 11),
                     ),
                   ],
                 ),
@@ -118,13 +119,13 @@ class _SummaryBanner extends StatelessWidget {
             children: [
               const Icon(Icons.bolt, size: 16, color: AppColors.accent),
               const SizedBox(width: 6),
-              const Text('Thống kê lịch sử sạc',
-                  style: TextStyle(
+              Text(S.charge.statsTitle,
+                  style: const TextStyle(
                       color: AppColors.accent,
                       fontWeight: FontWeight.bold,
                       fontSize: 13)),
               const Spacer(),
-              Text('${cycles.length} phiên',
+              Text('${cycles.length} ${S.charge.sessions}',
                   style: const TextStyle(
                       color: AppColors.textSecondary, fontSize: 11)),
             ],
@@ -135,17 +136,17 @@ class _SummaryBanner extends StatelessWidget {
           Row(
             children: [
               _StatCell(
-                  label: 'TB km/lần sạc',
+                  label: S.charge.avgKmPerCharge,
                   value: '${avgKm.toStringAsFixed(1)} km',
                   color: AppColors.accent),
               _vDivider(),
               _StatCell(
-                  label: 'TB % tiêu thụ',
+                  label: S.charge.avgSocUsed,
                   value: '${avgSocUsed.toStringAsFixed(1)}%',
                   color: AppColors.orange),
               _vDivider(),
               _StatCell(
-                  label: 'Range đầy pin TB',
+                  label: S.charge.avgFullRange,
                   value: '${avgRange.toStringAsFixed(0)} km',
                   color: AppColors.success),
             ],
@@ -175,8 +176,8 @@ class _SummaryBanner extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Dự báo range thông minh',
-                                      style: TextStyle(
+                                  Text(S.charge.smartRangeTitle,
+                                      style: const TextStyle(
                                           color: AppColors.success,
                                           fontSize: 11,
                                           fontWeight: FontWeight.w600)),
@@ -264,16 +265,16 @@ class _CycleCard extends StatelessWidget {
           context: context,
           builder: (ctx) => AlertDialog(
             backgroundColor: AppColors.card,
-            title: const Text('Xóa phiên này?',
-                style: TextStyle(color: AppColors.textPrimary, fontSize: 15)),
+            title: Text(S.charge.deleteSession,
+                style: const TextStyle(color: AppColors.textPrimary, fontSize: 15)),
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(ctx, false),
-                  child: const Text('Hủy',
+                  child: const Text(S.cancel,
                       style: TextStyle(color: AppColors.textSecondary))),
               TextButton(
                   onPressed: () => Navigator.pop(ctx, true),
-                  child: const Text('Xóa',
+                  child: const Text(S.delete,
                       style: TextStyle(color: AppColors.danger))),
             ],
           ),
@@ -333,23 +334,23 @@ class _CycleCard extends StatelessWidget {
               children: [
                 _GridCell(
                     icon: Icons.route,
-                    label: 'Quãng đường',
+                    label: S.charge.distance,
                     value: '${entry.distanceKm.toStringAsFixed(1)} km',
                     color: AppColors.accent),
                 _GridCell(
                     icon: Icons.battery_4_bar,
-                    label: 'Pin tiêu thụ',
+                    label: S.charge.battConsumed,
                     value:
                         '${entry.startSoc.toStringAsFixed(0)}% → ${entry.endSoc.toStringAsFixed(0)}%',
                     color: AppColors.orange),
                 _GridCell(
                     icon: Icons.bolt,
-                    label: '% đã dùng',
+                    label: S.charge.socUsed,
                     value: '${entry.socUsed.toStringAsFixed(1)}%',
                     color: AppColors.warning),
                 _GridCell(
                     icon: Icons.flag,
-                    label: 'Range đầy pin',
+                    label: S.charge.fullRange,
                     value:
                         '${entry.projectedFullRange.toStringAsFixed(0)} km',
                     color: AppColors.success),

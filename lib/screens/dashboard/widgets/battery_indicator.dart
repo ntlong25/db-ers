@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/bike_data.dart';
 import '../../../providers/smart_range_provider.dart';
 import '../../../theme/app_colors.dart';
+import '../../../theme/app_strings.dart';
 
 /// BatteryIndicator — card pin gradient với SOC%, range, voltage
 class BatteryIndicator extends ConsumerWidget {
@@ -51,8 +52,8 @@ class BatteryIndicator extends ConsumerWidget {
                       height: 1.0,
                     ),
                   ),
-                  const Text('pin còn lại',
-                      style: TextStyle(
+                  Text(S.battery.remaining,
+                      style: const TextStyle(
                           color: AppColors.textDim, fontSize: 9)),
                 ],
               ),
@@ -110,8 +111,8 @@ class BatteryIndicator extends ConsumerWidget {
                               ),
                             ],
                           ),
-                          const Text('dự báo range',
-                              style: TextStyle(
+                          Text(S.battery.smartRange,
+                              style: const TextStyle(
                                   color: AppColors.success,
                                   fontSize: 9)),
                         ],
@@ -153,7 +154,7 @@ class BatteryIndicator extends ConsumerWidget {
               const Spacer(),
               _TagChip(
                 icon: data.isCharging ? Icons.bolt : Icons.battery_charging_full,
-                label: data.isCharging ? 'Đang sạc' : 'Đang xả',
+                label: data.isCharging ? S.battery.charging : S.battery.discharging,
                 color: data.isCharging ? AppColors.success : AppColors.accent,
               ),
               const SizedBox(width: 8),
@@ -194,8 +195,8 @@ class _FirmwareRange extends StatelessWidget {
             height: 1.0,
           ),
         ),
-        const Text('ước tính',
-            style: TextStyle(color: AppColors.textDim, fontSize: 9)),
+        Text(S.battery.firmwareRange,
+            style: const TextStyle(color: AppColors.textDim, fontSize: 9)),
       ],
     );
   }

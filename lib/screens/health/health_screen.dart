@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/bike_data_provider.dart';
 import '../../providers/database_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_strings.dart';
 import '../../utils/battery_health_analyzer.dart';
 
 /// Provider lấy logs 30 ngày + chạy phân tích
@@ -35,7 +36,7 @@ class HealthScreen extends ConsumerWidget {
       backgroundColor: AppColors.bg,
       appBar: AppBar(
         backgroundColor: AppColors.card,
-        title: const Text('Sức khỏe Pin'),
+        title: Text(S.screen.battHealth),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(height: 1, color: AppColors.divider),
@@ -73,7 +74,7 @@ class _HealthBody extends StatelessWidget {
         // Metric bars
         _MetricCard(
           icon: Icons.balance,
-          label: 'Cân bằng Cell',
+          label: S.health.cellBalance,
           score: report.cellBalanceScore,
           subtitle:
               'Chênh lệch TB: ${report.avgCellDiffMv.toStringAsFixed(1)} mV',
@@ -82,27 +83,27 @@ class _HealthBody extends StatelessWidget {
         const SizedBox(height: 10),
         _MetricCard(
           icon: Icons.battery_full,
-          label: 'Dung lượng',
+          label: S.health.capacity,
           score: report.capacityScore,
           subtitle: report.currentAh > 0
               ? '${report.currentAh.toStringAsFixed(1)} / 48.5 Ah'
-              : 'Ước tính từ chu kỳ',
+              : S.health.estimatedCycles,
           color: _scoreColor(report.capacityScore),
         ),
         const SizedBox(height: 10),
         _MetricCard(
           icon: Icons.thermostat,
-          label: 'Nhiệt độ vận hành',
+          label: S.health.thermalOps,
           score: report.thermalScore,
           subtitle: report.logCount > 0
               ? 'Phân tích ${report.logCount} mẫu (30 ngày)'
-              : 'Chưa đủ dữ liệu',
+              : S.health.noDataYet,
           color: _scoreColor(report.thermalScore),
         ),
         const SizedBox(height: 10),
         _MetricCard(
           icon: Icons.loop,
-          label: 'Vòng đời còn lại',
+          label: S.health.cycleLife,
           score: report.cycleLifeScore,
           subtitle: '${report.cycles} / 500 chu kỳ',
           color: _scoreColor(report.cycleLifeScore),
@@ -361,8 +362,8 @@ class _CycleBar extends StatelessWidget {
             children: [
               const Icon(Icons.loop, size: 16, color: AppColors.accent),
               const SizedBox(width: 8),
-              const Text('Chu kỳ sạc',
-                  style: TextStyle(
+              Text(S.health.chargeCycles,
+                  style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w600,
                       fontSize: 13)),
@@ -444,8 +445,8 @@ class _WeakCellsCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Cell yếu phát hiện',
-                    style: TextStyle(
+                Text(S.health.weakCellTitle,
+                    style: const TextStyle(
                         color: AppColors.warning,
                         fontWeight: FontWeight.bold,
                         fontSize: 13)),
@@ -482,11 +483,11 @@ class _RecommendationsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(children: [
-            Icon(Icons.lightbulb_outline, size: 16, color: AppColors.accent),
-            SizedBox(width: 8),
-            Text('Khuyến nghị',
-                style: TextStyle(
+          Row(children: [
+            const Icon(Icons.lightbulb_outline, size: 16, color: AppColors.accent),
+            const SizedBox(width: 8),
+            Text(S.health.recommendations,
+                style: const TextStyle(
                     color: AppColors.accent,
                     fontWeight: FontWeight.bold,
                     fontSize: 13)),

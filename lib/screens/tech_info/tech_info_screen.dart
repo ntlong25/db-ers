@@ -5,6 +5,7 @@ import '../../models/bike_data.dart';
 import '../../providers/bike_data_provider.dart';
 import '../../providers/database_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_strings.dart';
 import '../../utils/debug_log_exporter.dart';
 import '../health/health_screen.dart';
 import 'widgets/bms_table.dart';
@@ -63,9 +64,9 @@ class _TechInfoScreenState extends ConsumerState<TechInfoScreen> {
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Đang xuất log...'),
-        duration: Duration(seconds: 1),
+      SnackBar(
+        content: Text(S.history.exportingLog),
+        duration: const Duration(seconds: 1),
       ),
     );
 
@@ -74,7 +75,7 @@ class _TechInfoScreenState extends ConsumerState<TechInfoScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Lỗi xuất log: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text('${S.history.exportError}$e'), backgroundColor: Colors.red),
         );
       }
     }
@@ -90,7 +91,7 @@ class _TechInfoScreenState extends ConsumerState<TechInfoScreen> {
         backgroundColor: AppColors.card,
         title: GestureDetector(
           onTap: _onTitleTap,
-          child: const Text('Thông tin kỹ thuật'),
+          child: Text(S.screen.techInfo),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -99,7 +100,7 @@ class _TechInfoScreenState extends ConsumerState<TechInfoScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.favorite_border, color: AppColors.accent),
-            tooltip: 'Sức khỏe Pin',
+            tooltip: S.screen.battHealth,
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const HealthScreen()),

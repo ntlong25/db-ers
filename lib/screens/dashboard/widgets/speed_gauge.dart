@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
+import '../../../theme/app_strings.dart';
 
 /// SpeedGauge — đồng hồ vòng cung tốc độ (0–120 km/h)
 /// Circular arc gauge với gradient electric blue→orange + glow effect
@@ -59,9 +60,9 @@ class _StateBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, color) = switch (pcbState) {
-      3 => ('● ĐANG CHẠY', AppColors.accent),
-      2 => ('● ĐỖ XE',     AppColors.orange),
-      _ => ('● TẮT MÁY',  AppColors.textDim),
+      3 => ('● ${S.bike.running}', AppColors.accent),
+      2 => ('● ${S.bike.parked}',  AppColors.orange),
+      _ => ('● ${S.bike.off}',     AppColors.textDim),
     };
 
     return Container(

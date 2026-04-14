@@ -12,6 +12,7 @@ import '../../services/alarm_service.dart';
 import '../../services/foreground_service_handler.dart';
 import '../../services/notification_service.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_strings.dart';
 import '../../utils/permission_helper.dart';
 import '../../utils/bike_state_labels.dart';
 import 'scan_dialog.dart';
@@ -73,9 +74,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final ok = await PermissionHelper.requestAll();
     if (!ok && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Cần cấp quyền Bluetooth để kết nối xe'),
-          action: SnackBarAction(label: 'Cài đặt', onPressed: PermissionHelper.openSettings),
+        SnackBar(
+          content: Text(S.ble.permissionNeeded),
+          action: SnackBarAction(label: S.settings, onPressed: PermissionHelper.openSettings),
         ),
       );
     }
@@ -129,20 +130,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.card,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Quên xe?', style: TextStyle(color: AppColors.textPrimary)),
+        title: Text(S.ble.forgetTitle, style: const TextStyle(color: AppColors.textPrimary)),
         content: Text('Xóa xe đã lưu ($mac)?',
             style: const TextStyle(color: AppColors.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Hủy', style: TextStyle(color: AppColors.textSecondary)),
+            child: const Text(S.cancel, style: TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
               ref.read(bleConnectionProvider.notifier).forgetDevice();
             },
-            child: const Text('Xóa', style: TextStyle(color: AppColors.danger)),
+            child: const Text(S.delete, style: TextStyle(color: AppColors.danger)),
           ),
         ],
       ),
@@ -316,12 +317,12 @@ class _StatusStrip extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _StatusPill(Icons.highlight,    'Đèn',    data.headlight,       Colors.yellow.shade600),
-          _StatusPill(Icons.lock,         data.isLocked ? 'Khóa' : 'Mở', data.isLocked, AppColors.orange),
-          _StatusPill(Icons.bolt,         data.isCharging ? 'Sạc' : 'Xả', data.isCharging, AppColors.success),
-          _StatusPill(Icons.campaign,     'Còi',    data.isAlarmSounding, AppColors.danger),
-          _StatusPill(Icons.shield,       'BV',     data.isArmed,         AppColors.accent),
-          _StatusPill(Icons.snooze,       'Idle',   data.idleOff,         Colors.purple.shade300),
+          _StatusPill(Icons.highlight,    S.bike.light,    data.headlight,       Colors.yellow.shade600),
+          _StatusPill(Icons.lock,         data.isLocked ? S.bike.locked : S.bike.unlocked, data.isLocked, AppColors.orange),
+          _StatusPill(Icons.bolt,         data.isCharging ? S.battery.chargingSuffix : S.battery.dischargingSuffix, data.isCharging, AppColors.success),
+          _StatusPill(Icons.campaign,     S.bike.horn,    data.isAlarmSounding, AppColors.danger),
+          _StatusPill(Icons.shield,       S.bike.protection,     data.isArmed,         AppColors.accent),
+          _StatusPill(Icons.snooze,       S.bike.idle,   data.idleOff,         Colors.purple.shade300),
         ],
       ),
     );
@@ -442,12 +443,12 @@ class _QuickStatsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      _StatItem(Icons.route,           '${data.odo.toStringAsFixed(1)} km',   'ODO'),
-      _StatItem(Icons.electric_bolt,   '${data.current.toStringAsFixed(1)} A','Dòng điện'),
-      _StatItem(Icons.thermostat,      '${data.tempMotor.toStringAsFixed(0)}°', 'Nhiệt độ'),
-      _StatItem(Icons.battery_charging_full, '${data.voltage.toStringAsFixed(1)} V', 'Điện áp'),
-      _StatItem(Icons.loop,            '${data.cycles}',                      'Chu kỳ'),
-      _StatItem(Icons.info_outline,    BikeStateLabels.fromPcbState(data.pcbState), 'Trạng thái'),
+      _StatItem(Icons.route,           '${data.odo.toStringAsFixed(1)} km',   S.metrics.odo),
+      _StatItem(Icons.electric_bolt,   '${data.current.toStringAsFixed(1)} A', S.metrics.current),
+      _StatItem(Icons.thermostat,      '${data.tempMotor.toStringAsFixed(0)}°', S.metrics.temperature),
+      _StatItem(Icons.battery_charging_full, '${data.voltage.toStringAsFixed(1)} V', S.metrics.voltage),
+      _StatItem(Icons.loop,            '${data.cycles}',                      S.metrics.cycleCount),
+      _StatItem(Icons.info_outline,    BikeStateLabels.fromPcbState(data.pcbState), S.metrics.status),
     ];
 
     return GridView.builder(
@@ -643,14 +644,14 @@ class _DisconnectedBody extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.bluetooth_searching, color: Colors.black, size: 20),
-                      SizedBox(width: 8),
+                      const Icon(Icons.bluetooth_searching, color: Colors.black, size: 20),
+                      const SizedBox(width: 8),
                       Text(
-                        'Tìm xe Datbike',
-                        style: TextStyle(
+                        S.ble.scanTitle,
+                        style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -732,8 +733,8 @@ class _SettingsSheetState extends ConsumerState<_SettingsSheet> {
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               icon: const Icon(Icons.bluetooth_searching),
-              label: const Text('Quét & kết nối xe',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              label: Text(S.ble.scanButton,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               onPressed: widget.onScanTap,
             ),
           ),
@@ -744,15 +745,15 @@ class _SettingsSheetState extends ConsumerState<_SettingsSheet> {
             children: [
               const Icon(Icons.speed, size: 16, color: AppColors.orange),
               const SizedBox(width: 8),
-              const Text('Cảnh báo tốc độ',
-                  style: TextStyle(
+              Text(S.speedAlert.title,
+                  style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w600,
                       fontSize: 13)),
               const Spacer(),
               Switch(
                 value: enabled,
-                activeColor: AppColors.accent,
+                activeThumbColor: AppColors.accent,
                 onChanged: (v) {
                   if (v) {
                     notifier.setThreshold(_sliderVal);
@@ -803,7 +804,7 @@ class _SettingsSheetState extends ConsumerState<_SettingsSheet> {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 icon: const Icon(Icons.link_off, size: 16),
-                label: const Text('Quên xe đã lưu'),
+                label: Text(S.ble.forgetButton),
                 onPressed: widget.onForgetTap,
               ),
             ),

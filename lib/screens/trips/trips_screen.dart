@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/trip_entry.dart';
 import '../../providers/database_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_strings.dart';
 
 /// Provider lấy danh sách chuyến đi
 final _allTripsProvider = FutureProvider<List<TripEntry>>((ref) async {
@@ -32,18 +33,18 @@ class TripsScreen extends ConsumerWidget {
 class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.route, size: 64, color: AppColors.textDim),
-          SizedBox(height: 16),
-          Text('Chưa có chuyến đi nào',
-              style: TextStyle(
+          const Icon(Icons.route, size: 64, color: AppColors.textDim),
+          const SizedBox(height: 16),
+          Text(S.trip.noTrips,
+              style: const TextStyle(
                   color: AppColors.textSecondary, fontSize: 15)),
-          SizedBox(height: 8),
-          Text('App tự động ghi khi bạn chạy xe',
-              style: TextStyle(
+          const SizedBox(height: 8),
+          Text(S.trip.autoRecord,
+              style: const TextStyle(
                   color: AppColors.textDim, fontSize: 12)),
         ],
       ),
@@ -140,8 +141,8 @@ class _SummaryBanner extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Tổng cộng',
-              style: TextStyle(
+          Text(S.trip.total,
+              style: const TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 11,
                   letterSpacing: 1)),
@@ -149,13 +150,13 @@ class _SummaryBanner extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _SumStat('${totalKm.toStringAsFixed(1)} km', 'Quãng đường',
+              _SumStat('${totalKm.toStringAsFixed(1)} km', S.trip.distance,
                   Icons.route),
-              _SumStat('$tripCount', 'Chuyến đi', Icons.flag),
-              _SumStat(_formatDuration(totalSeconds), 'Thời gian',
+              _SumStat('$tripCount', S.trip.trips, Icons.flag),
+              _SumStat(_formatDuration(totalSeconds), S.trip.duration,
                   Icons.timer_outlined),
               _SumStat('${(totalWh / 1000).toStringAsFixed(2)} kWh',
-                  'Năng lượng', Icons.bolt),
+                  S.trip.energy, Icons.bolt),
             ],
           ),
         ],
@@ -264,22 +265,22 @@ class _TripCard extends StatelessWidget {
                 _TripStat(
                   Icons.route,
                   '${trip.distanceKm.toStringAsFixed(1)} km',
-                  'Quãng đường',
+                  S.trip.distance,
                 ),
                 _TripStat(
                   Icons.speed,
                   '${trip.avgSpeedKmh.toStringAsFixed(0)} km/h',
-                  'TB tốc độ',
+                  S.trip.avgSpeed,
                 ),
                 _TripStat(
                   Icons.fast_forward,
                   '${trip.maxSpeedKmh.toStringAsFixed(0)} km/h',
-                  'Tốc độ max',
+                  S.trip.maxSpeed,
                 ),
                 _TripStat(
                   Icons.battery_charging_full,
                   '${trip.socUsed.toStringAsFixed(0)}%',
-                  'Pin dùng',
+                  S.trip.battUsed,
                   color: trip.socUsed > 30
                       ? AppColors.warning
                       : AppColors.textSecondary,
