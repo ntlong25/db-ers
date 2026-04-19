@@ -34,8 +34,18 @@ class BikeBleManager {
   }) async {
     await stopScan();
 
-    // Nếu bluetooth đang tắt, không scan
-    final adapterState = await FlutterBluePlus.adapterState.first;
+    // iOS: CoreBluetooth khởi tạo bất đồng bộ — đợi state ổn định (tối đa 5s)
+    // Android: .first thường trả về ngay, nhưng cũng an toàn khi dùng cách này
+    final adapterState = await FlutterBluePlus.adapterState
+        .where((s) =>
+            s != BluetoothAdapterState.unknown &&
+            s != BluetoothAdapterState.turningOn)
+        .first
+        .timeout(
+          const Duration(seconds: 5),
+          onTimeout: () => BluetoothAdapterState.off,
+        );
+
     if (adapterState != BluetoothAdapterState.on) {
       return;
     }
